@@ -8,6 +8,8 @@ on:
       - "include/**"
       - "src/**"
       - "submodules/**"
+    branches:
+      - main
 
 # Env variables
 env:
