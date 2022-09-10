@@ -2,14 +2,14 @@ name: Qt C++ Build test
 
 on:
   push:
+    branches:
+      - main
     paths:
       - ".github/workflows/build.yml"
       - "forms/**"
       - "include/**"
       - "src/**"
       - "submodules/**"
-    branches:
-      - main
 
 # Env variables
 env:
