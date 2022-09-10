@@ -14,7 +14,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
-include(cmake/conan.cmake)
+include(${CMAKE_SOURCE_DIR}/build_conan/${CMAKE_BUILD_TYPE}/conanbuildinfo.cmake)
+conan_basic_setup()
 
 set(PROJECT_SOURCES
         main.cpp
@@ -33,7 +34,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR})
 else()
     if(ANDROID)
         add_library(qt_template SHARED
