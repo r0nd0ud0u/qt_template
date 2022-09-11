@@ -6,10 +6,10 @@ on:
       - main
     paths:
       - ".github/workflows/build.yml"
-      - "forms/**"
-      - "include/**"
-      - "src/**"
+      - "app/**"
       - "submodules/**"
+    pull_request:
+        types: [opened, synchronize, reopened]
 
 # Env variables
 env:
@@ -17,6 +17,7 @@ env:
   SONAR_SCANNER_VERSION: 4.7.0.2747
   SONAR_SERVER_URL: "https://sonarcloud.io"
   BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
+  GTEST_OUTPUT: xml:results\output.xml
 
 jobs:
   # Build for windows and mac (without sonar scanner)
@@ -40,6 +41,13 @@ jobs:
           python-version: 3.10
       - name: Install Conan
         run: pip install conan pytest && conan --version
+      - name: Configure profile Conan
+        run: |
+            mkdir build_conan
+            cd build_conan
+            conan profile new release --detect
+            conan install .. -pr=release --build=missing
+                
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.13.2
 
@@ -82,3 +90,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           sonar-scanner --define sonar.host.url="${{ env.SONAR_SERVER_URL }}" --define sonar.cfamily.build-wrapper-output="${{runner.workspace}}/build/${{ env.BUILD_WRAPPER_OUT_DIR }}"
+#      - name: run tests
+ #       run: |
+  #        ${{runner.workspace}}/build/bin/tests.exe    
+   #   - name: Parse xml output
+     #   run: |
+      #    python 'scripts\parse_xml_unittest.py' -xml_file 'results\output.xml'
