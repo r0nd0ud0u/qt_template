@@ -43,8 +43,8 @@ jobs:
         run: pip install conan pytest && conan --version
       - name: Configure profile Conan
         run: |
-            mkdir build_conan
-            cd build_conan
+            mkdir build_conan/Release
+            cd build_conan/Release
             conan profile new release --detect
             conan install .. -pr=release --build=missing
                 
